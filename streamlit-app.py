@@ -3,6 +3,7 @@ import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 from transformers import LayoutLMForSequenceClassification, LayoutLMTokenizer
 import torch
+import requests
 from torch.utils.data import Dataset, DataLoader
 import pytesseract
 from datasets import Features, Sequence, ClassLabel, Value, Array2D
@@ -114,7 +115,10 @@ classes = ["bill", "invoice", "others", "Purchase_Order", "remittance"]
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = LayoutLMForSequenceClassification.from_pretrained("saved_model/run2")
+    url = "https://vast-ml-models.s3-ap-southeast-2.amazonaws.com/Document-Classification-5-labels-final.bin"
+    r = requests.get(url, allow_redirects=True)
+    open('saved_model/pytorch_model.bin', 'wb').write(r.content)
+    model = LayoutLMForSequenceClassification.from_pretrained("saved_model")
     return model
 
 load_model().to(device)
