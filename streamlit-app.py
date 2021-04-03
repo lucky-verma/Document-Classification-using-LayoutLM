@@ -127,7 +127,13 @@ load_model().to(device)
 
 st.title('VAST: Document Classifier')
 st.header('Upload any document image')
-
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 image = st.file_uploader('Upload here', type=['jpg', 'png', 'jpeg', 'webp'])
